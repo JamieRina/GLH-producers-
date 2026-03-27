@@ -31,6 +31,9 @@ namespace GLH_producers.Models
         [StringLength(20)]
         public string Role { get; set; }
 
+        [Required(ErrorMessage = "Date of birth is requierd")]
+        [DisplayName("Date of birth (DD-MM-YY)")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime CreatedAt { get; set; }
     }
 }

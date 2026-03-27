@@ -20,12 +20,12 @@ namespace GLH_producers.Models
 
         [Required(ErrorMessage = "Password is requiered")]
         [DisplayName("Password 8-18 characters long")]
-        [StringLength(100, MinimumLength = 6)]
+        [StringLength(100, MinimumLength = 8, ErrorMessage = "Password must be at least  characters.")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "Please have matching passwords")]
-        [DataType(DataType.Password)]
+        [Required(ErrorMessage = "Please confirm your password")]
+        [DataType(DataType.Password, ErrorMessage = "Password do not match")]
         [Compare("Password")]
         public string ConfirmPassword { get; set; }
     }
