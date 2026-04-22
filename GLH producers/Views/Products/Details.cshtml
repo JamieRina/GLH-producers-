@@ -1,0 +1,31 @@
+@model GLH_producers.Models.ProductModel
+
+@{
+    ViewBag.Title = "Product Details";
+}
+
+<h2>Product Details</h2>
+<p>This page shows more information about one product before it is added to the basket.</p>
+
+<div class="card">
+    <div class="card-body">
+        <h3>@Html.Encode(Model.Name)</h3>
+        <p><strong>Category:</strong> @Html.Encode(Model.Category)</p>
+        <p>@Html.Encode(Model.Description)</p>
+        <p><strong>Batch code:</strong> @Html.Encode(Model.BatchCode)</p>
+        <p><strong>Price:</strong> @Model.Price.ToString("C")</p>
+        <p><strong>Available stock:</strong> @Model.Stock</p>
+
+        @using (Html.BeginForm("Add", "Basket", FormMethod.Post))
+        {
+            @Html.Hidden("id", Model.ProductId)
+            <label for="quantity">Quantity</label>
+            <input id="quantity" class="form-control mb-2" type="number" name="quantity" value="1" min="1" max="@Model.Stock" />
+            <button type="submit" class="btn btn-primary">Add to basket</button>
+        }
+    </div>
+</div>
+
+<p class="mt-3">
+    @Html.ActionLink("Back to products", "Index", "Products")
+</p>

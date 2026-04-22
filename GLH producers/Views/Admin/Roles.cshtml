@@ -1,0 +1,46 @@
+@model System.Collections.Generic.List<GLH_producers.Models.AdminUserRoleViewModel>
+
+@{
+    ViewBag.Title = "Role Management";
+}
+
+<h2>Role Management</h2>
+<p>This hidden page lets an admin change users between Customer, Producer, and Admin roles.</p>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-info">@ViewBag.Message</div>
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Change role</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@Html.Encode(user.FullName)</td>
+                <td>@Html.Encode(user.Email)</td>
+                <td>@user.Role</td>
+                <td>
+                    @using (Html.BeginForm("UpdateRole", "Admin", FormMethod.Post))
+                    {
+                        @Html.Hidden("userId", user.UserId)
+                        <select name="role" class="form-select d-inline-block" style="width:160px;">
+                            <option value="Customer" @(user.Role == "Customer" ? "selected" : "")>Customer</option>
+                            <option value="Producer" @(user.Role == "Producer" ? "selected" : "")>Producer</option>
+                            <option value="Admin" @(user.Role == "Admin" ? "selected" : "")>Admin</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

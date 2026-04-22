@@ -1,0 +1,57 @@
+@model GLH_producers.Models.ProductModel
+
+@{
+    ViewBag.Title = "Add Product";
+}
+
+<h2>Add Product</h2>
+<p>This page lets a producer add a new product to their own product list.</p>
+
+@using (Html.BeginForm("CreateProduct", "Producer", FormMethod.Post))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Category)
+        @Html.TextBoxFor(m => m.Category, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Category, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Description)
+        @Html.TextAreaFor(m => m.Description, new { @class = "form-control", rows = 3 })
+        @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Price)
+        @Html.TextBoxFor(m => m.Price, new { @class = "form-control", type = "number", min = "0", step = "0.01" })
+        @Html.ValidationMessageFor(m => m.Price, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Stock)
+        @Html.TextBoxFor(m => m.Stock, new { @class = "form-control", type = "number", min = "0" })
+        @Html.ValidationMessageFor(m => m.Stock, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.BatchCode)
+        @Html.TextBoxFor(m => m.BatchCode, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.BatchCode, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-check mb-3">
+        @Html.CheckBoxFor(m => m.IsAvailable, new { @class = "form-check-input" })
+        @Html.LabelFor(m => m.IsAvailable, "Available", new { @class = "form-check-label" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save product</button>
+    @Html.ActionLink("Cancel", "MyProducts", "Producer", null, new { @class = "btn btn-secondary" })
+}

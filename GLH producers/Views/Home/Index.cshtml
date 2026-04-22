@@ -1,33 +1,56 @@
-﻿@{
+@model GLH_producers.Models.HomeIndexViewModel
+
+@{
     ViewBag.Title = "Home Page";
 }
 
 <main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
-    </section>
+    <h2>Welcome to GLH Producers</h2>
+    <p>
+        GLH Producers helps local customers find fresh products from nearby producers.
+        Customers can browse available products, add them to a basket, and place orders
+        for collection or delivery.
+    </p>
 
-    <div class="row">
-        <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-            <h2 id="gettingStartedTitle">Getting started</h2>
-            <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
-            </p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="librariesTitle">
-            <h2 id="librariesTitle">Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="hostingTitle">
-            <h2 id="hostingTitle">Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-        </section>
-    </div>
+    <p>
+        This homepage gives a simple preview of the shop and links users to the main product
+        browsing page.
+    </p>
+
+    <p>
+        @Html.ActionLink("Browse all products", "Index", "Products", null, new { @class = "btn btn-primary" })
+        @Html.ActionLink("View basket", "Index", "Basket", null, new { @class = "btn btn-secondary" })
+    </p>
+
+    <h3>Featured Products</h3>
+
+    @if (Model.FeaturedProducts.Count == 0)
+    {
+        <p>No products are currently available.</p>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var product in Model.FeaturedProducts)
+            {
+                <div class="col-md-3 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h4>@Html.Encode(product.Name)</h4>
+                            <p>@Html.Encode(product.Category)</p>
+                            <p><strong>@product.Price.ToString("C")</strong></p>
+                            <p>Stock: @product.Stock</p>
+
+                            @using (Html.BeginForm("Add", "Basket", FormMethod.Post))
+                            {
+                                @Html.Hidden("id", product.ProductId)
+                                <input type="hidden" name="quantity" value="1" />
+                                <button type="submit" class="btn btn-primary btn-sm">Add to basket</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
 </main>

@@ -1,0 +1,65 @@
+@model GLH_producers.Models.BasketViewModel
+
+@{
+    ViewBag.Title = "Basket";
+}
+
+<h2>Basket</h2>
+<p>This page shows the products currently saved in the session basket before checkout.</p>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-info">@ViewBag.Message</div>
+}
+
+@if (Model.Items.Count == 0)
+{
+    <p>Your basket is empty.</p>
+    <p>@Html.ActionLink("Browse products", "Index", "Products", null, new { @class = "btn btn-primary" })</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@Html.Encode(item.Name)</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td>
+                        @using (Html.BeginForm("Update", "Basket", FormMethod.Post))
+                        {
+                            @Html.Hidden("id", item.ProductId)
+                            <input type="number" name="quantity" value="@item.Quantity" min="1" max="@item.Stock" class="form-control d-inline-block" style="width:90px;" />
+                            <button type="submit" class="btn btn-secondary btn-sm">Update</button>
+                        }
+                    </td>
+                    <td>@item.Subtotal.ToString("C")</td>
+                    <td>
+                        @using (Html.BeginForm("Remove", "Basket", FormMethod.Post))
+                        {
+                            @Html.Hidden("id", item.ProductId)
+                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h4>Total: @Model.Total.ToString("C")</h4>
+
+    <p>
+        @Html.ActionLink("Continue shopping", "Index", "Products", null, new { @class = "btn btn-secondary" })
+        @Html.ActionLink("Checkout", "Checkout", "Orders", null, new { @class = "btn btn-primary" })
+    </p>
+}
