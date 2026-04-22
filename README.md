@@ -1,28 +1,94 @@
-````md
 # GLH Producers
 
-A full-stack web development project built with **C#**, **ASP.NET MVC**, **SQL**, **HTML**, **CSS**, and **JavaScript**.
+GLH Producers is a student ASP.NET MVC web application for a local food producer system.
 
-## About This Project
+It lets users:
+- browse products
+- add items to a basket
+- place orders
+- manage products if they are a producer
 
-This project was created as part of my learning journey in **full-stack web development**. It includes both frontend and backend development concepts, along with database integration.
+This project was built as part of my full-stack web development practice using C#, ASP.NET MVC, SQL Server, HTML, CSS, Bootstrap, and a small amount of JavaScript.
 
-I am still a **student learning software and web development**, so this project may not be 100% perfect. My goal with this repository is to practice, improve my skills, and show my progress as I continue learning.
+## About the Project
+
+This project is based on a practice exam brief for a local food hub system.
+
+The website includes:
+- public product browsing
+- customer checkout
+- producer product management
+- simple order viewing
+- loyalty points
+- a hidden admin page for changing user roles
+
+I am still learning software and web development, so I have tried to keep the project simple, readable, and easy to follow.
+
+The main aim of this project was to practise:
+- ASP.NET MVC
+- SQL Server
+- authentication
+- sessions
+- role-based features
+- building a full web application structure
 
 ## Technologies Used
 
-- **C#**
-- **ASP.NET MVC**
-- **SQL Server**
-- **HTML5**
-- **CSS3**
-- **JavaScript**
-- **Bootstrap**  
-- **Entity Framework** *(if used in your project)*
+- C#
+- ASP.NET MVC
+- SQL Server LocalDB
+- ADO.NET / SqlConnection
+- HTML5
+- CSS3
+- Bootstrap
+- JavaScript
+
+This project does **not** use Entity Framework.
+
+## Features
+
+### Public Features
+- Homepage with a simple welcome section
+- Product browsing page
+- Product prices and stock shown clearly
+
+### Basket and Orders
+- Session-based basket
+- Add items to basket
+- Update basket quantity
+- Remove items from basket
+- Checkout for logged-in users
+- Collection or delivery option
+- Delivery address validation
+- Required date validation
+- Orders saved to SQL Server
+- Order items saved to SQL Server
+- Stock reduced after checkout
+- Customer order history
+
+### Loyalty System
+- Simple points system for users
+
+### Producer Features
+- Producer dashboard
+- Add products
+- Edit products
+- Remove products
+- View own products
+- View orders related to their own products
+
+### Admin Features
+- Hidden admin page at `/Admin/Roles`
+- Admin can change a user role to:
+  - Customer
+  - Producer
+  - Admin
+
+The admin page is not shown in the normal site navigation.
 
 ## Project Structure
 
-```bash
+```text
 GLH Producers/
 │
 ├── App_Start/
@@ -32,7 +98,9 @@ GLH Producers/
 ├── Properties/
 ├── Scripts/
 ├── Views/
-├── GLH producers.csproj
+├── App_Data/
+├── DatabaseUpdates.sql
+├── GLH Producers.csproj
 ├── Global.asax
 ├── Global.asax.cs
 ├── Web.config
@@ -40,65 +108,84 @@ GLH Producers/
 ├── Web.Release.config
 ├── packages.config
 └── favicon.ico
-````
+Database Notes
 
-## Features
+The project uses SQL Server LocalDB with the database file stored in App_Data.
 
-* MVC project structure
-* Frontend design using HTML, CSS, and JavaScript
-* Backend logic written in C#
-* SQL database connection
-* Organized folders for controllers, models, views, scripts, and styles
-* Practice with real-world full-stack development structure
+Main tables used in the project:
 
-## Purpose
+Users
+Producers
+Products
+Orders
+OrderItems
+UserPoints
 
-The purpose of this project is to help me build experience with:
+If the UserPoints table is missing, run DatabaseUpdates.sql.
 
-* Creating web applications using ASP.NET MVC
-* Connecting a web app to a SQL database
-* Organizing backend and frontend code
-* Understanding how full-stack applications work
-* Improving my coding, debugging, and problem-solving skills
+This script adds the loyalty points table and creates starting points rows for existing users.
 
-## Note
+How to Run the Project
 
-This project is part of my learning process, so some parts may still need improvement or refactoring. I welcome feedback and suggestions because I am always trying to learn and get better.
+Clone the repository:
 
-## How to Run the Project
+git clone https://github.com/JamieRina/GLH-producers-.git
+Open the solution in Visual Studio
+Restore NuGet packages if needed
+Check the database connection string in Web.config
+Run DatabaseUpdates.sql if needed
+Start the project using IIS Express or Visual Studio
+User Roles
 
-1. Clone the repository:
+The project supports 3 roles:
 
-   ```bash
-   [git clone https://github.com/JamieRina/GLH-producers-.git)]
-   ```
+Customer
+Producer
+Admin
+Role behaviour
+New users register as Customer by default
+Producers can manage their own products
+Admins can go to /Admin/Roles after logging in to manage user roles
+What I Practised in This Project
 
-2. Open the project in **Visual Studio**
+This project helped me practise:
 
-3. Restore NuGet packages if needed
+building an ASP.NET MVC application
+connecting C# code to a SQL Server database
+using sessions for basket data
+creating role-based pages
+writing controller actions and Razor views
+validating user input
+keeping a student project organised and readable
+Future Improvements
+Improve styling and responsiveness
+Add better error handling
+Add more detailed order status updates
+Improve product search and filtering
+Add more validation for producer details
+Add tests as I learn more about MVC testing
+Author
 
-4. Set up the database connection in `Web.config`
-
-5. Run the project using **IIS Express** or Visual Studio
-
-## Future Improvements
-
-* Improve UI design
-* Add more validation
-* Refactor code for better structure
-* Add more database features
-* Improve responsiveness
-* Continue learning best practices
-
-## Author
-
-**Your Name**
+Jamie Rina
 Student Developer
-GitHub: [@JamieRina](https://github.com/JamieRina)
+GitHub: @JamieRina
 
-## Final Note
+Final Note
 
-I know this project is not perfect, and currently working on it as of this README commit but it represents my effort, learning, and growth as a student developer. I will continue improving it over time as I gain more experience.
+This project is part of my learning process.
 
-```
-```
+It is not meant to be perfect, but it shows my progress with:
+
+C#
+ASP.NET MVC
+SQL
+full-stack web development
+
+A couple of small fixes I made:
+- made the wording more natural and easier to scan
+- grouped features into sections
+- cleaned up the project structure formatting
+- made the run steps simpler
+- fixed some repeated wording
+
+I can also turn this into a more professional portfolio-style README if you want.
