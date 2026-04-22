@@ -6,33 +6,30 @@ using System.Web.Mvc;
 
 namespace GLH_producers.Controllers
 {
-    public class HomeController : Controller
+    public class ProductsController : Controller
     {
         private string connString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
         public ActionResult Index()
         {
-            HomeIndexViewModel model = new HomeIndexViewModel();
-            model.FeaturedProducts = GetFeaturedProducts();
-
-            return View(model);
+            ViewBag.Message = TempData["Message"];
+            return View(GetAvailableProducts());
         }
 
-        public ActionResult About()
+        public ActionResult Details(int id)
         {
-            ViewBag.Message = "Your application description page.";
+            ProductModel product = GetAvailableProduct(id);
 
-            return View();
+            if (product == null)
+            {
+                TempData["Message"] = "That product is not available.";
+                return RedirectToAction("Index");
+            }
+
+            return View(product);
         }
 
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-
-        private List<ProductModel> GetFeaturedProducts()
+        private List<ProductModel> GetAvailableProducts()
         {
             List<ProductModel> products = new List<ProductModel>();
 
@@ -41,10 +38,10 @@ namespace GLH_producers.Controllers
                 connection.Open();
 
                 string sql = @"
-                    SELECT TOP 4 ProductId, ProducerId, Name, Category, Description, Price, Stock, BatchCode, IsAvailable
+                    SELECT ProductId, ProducerId, Name, Category, Description, Price, Stock, BatchCode, IsAvailable
                     FROM Products
                     WHERE IsAvailable = 1 AND Stock > 0
-                    ORDER BY ProductId DESC";
+                    ORDER BY Category, Name";
 
                 SqlCommand cmd = new SqlCommand(sql, connection);
                 SqlDataReader reader = cmd.ExecuteReader();
@@ -58,6 +55,35 @@ namespace GLH_producers.Controllers
             }
 
             return products;
+        }
+
+        private ProductModel GetAvailableProduct(int productId)
+        {
+            ProductModel product = null;
+
+            using (SqlConnection connection = new SqlConnection(connString))
+            {
+                connection.Open();
+
+                string sql = @"
+                    SELECT ProductId, ProducerId, Name, Category, Description, Price, Stock, BatchCode, IsAvailable
+                    FROM Products
+                    WHERE ProductId = @ProductId AND IsAvailable = 1 AND Stock > 0";
+
+                SqlCommand cmd = new SqlCommand(sql, connection);
+                cmd.Parameters.AddWithValue("@ProductId", productId);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    product = ReadProduct(reader);
+                }
+
+                reader.Close();
+            }
+
+            return product;
         }
 
         private ProductModel ReadProduct(SqlDataReader reader)

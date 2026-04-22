@@ -1,0 +1,95 @@
+@model GLH_producers.Models.ProducerDashboardViewModel
+
+@{
+    ViewBag.Title = "Producer Dashboard";
+}
+
+<h2>Producer Dashboard</h2>
+<p>This page is the main area for producers to manage products and see recent order information.</p>
+
+@if (Model.Producer != null)
+{
+    <h4>@Html.Encode(Model.Producer.BusinessName)</h4>
+}
+
+<p>
+    @Html.ActionLink("My Products", "MyProducts", "Producer", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Add Product", "CreateProduct", "Producer", null, new { @class = "btn btn-secondary" })
+    @Html.ActionLink("View Orders", "Orders", "Producer", null, new { @class = "btn btn-secondary" })
+</p>
+
+<div class="row">
+    <div class="col-md-6">
+        <h4>Your products</h4>
+        <p>Total products: @Model.Products.Count</p>
+
+        @if (Model.Products.Count == 0)
+        {
+            <p>No products have been added yet.</p>
+        }
+        else
+        {
+            <table class="table table-sm table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Stock</th>
+                        <th>Available</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model.Products)
+                    {
+                        <tr>
+                            <td>@Html.Encode(product.Name)</td>
+                            <td>@product.Stock</td>
+                            <td>@(product.IsAvailable ? "Yes" : "No")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+
+    <div class="col-md-6">
+        <h4>Recent order items</h4>
+
+        @if (Model.Orders.Count == 0)
+        {
+            <p>No orders have been placed for your products yet.</p>
+        }
+        else
+        {
+            <table class="table table-sm table-bordered">
+                <thead>
+                    <tr>
+                        <th>Order</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int shownOrders = 0;
+                    }
+
+                    @foreach (var order in Model.Orders)
+                    {
+                        if (shownOrders >= 5)
+                        {
+                            break;
+                        }
+
+                        shownOrders++;
+
+                        <tr>
+                            <td>#@order.OrderId</td>
+                            <td>@Html.Encode(order.ProductName)</td>
+                            <td>@order.Quantity</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

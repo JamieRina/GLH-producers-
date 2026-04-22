@@ -1,0 +1,87 @@
+@model GLH_producers.Models.CheckoutViewModel
+
+@{
+    ViewBag.Title = "Checkout";
+}
+
+<h2>Checkout</h2>
+<p>This page collects the order type and required date before the order is saved.</p>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="mb-3">
+        <label>Order type</label><br />
+        <label>
+            @Html.RadioButtonFor(m => m.OrderType, "Collection", new { id = "orderCollection" })
+            Collection
+        </label>
+        <label class="ms-3">
+            @Html.RadioButtonFor(m => m.OrderType, "Delivery", new { id = "orderDelivery" })
+            Delivery
+        </label>
+        <br />
+        @Html.ValidationMessageFor(m => m.OrderType, "", new { @class = "text-danger" })
+    </div>
+
+    <div id="deliveryAddressBox" class="mb-3">
+        @Html.LabelFor(m => m.Address, "Delivery address")
+        @Html.TextAreaFor(m => m.Address, new { @class = "form-control", rows = 3 })
+        @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.RequiredDate, "Required date")
+        @Html.TextBoxFor(m => m.RequiredDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+        @Html.ValidationMessageFor(m => m.RequiredDate, "", new { @class = "text-danger" })
+    </div>
+
+    <h4>Order items</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.BasketItems)
+            {
+                <tr>
+                    <td>@Html.Encode(item.Name)</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Subtotal.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p><strong>Total:</strong> @Model.Total.ToString("C")</p>
+    <p><strong>Points earned:</strong> @Model.PointsEarned</p>
+
+    <button type="submit" class="btn btn-primary">Place order</button>
+    @Html.ActionLink("Back to basket", "Index", "Basket", null, new { @class = "btn btn-secondary" })
+}
+
+@section scripts {
+    <script>
+        function updateDeliveryAddress() {
+            var delivery = document.getElementById("orderDelivery");
+            var addressBox = document.getElementById("deliveryAddressBox");
+
+            if (delivery && delivery.checked) {
+                addressBox.style.display = "block";
+            } else {
+                addressBox.style.display = "none";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            updateDeliveryAddress();
+            document.getElementById("orderCollection").addEventListener("change", updateDeliveryAddress);
+            document.getElementById("orderDelivery").addEventListener("change", updateDeliveryAddress);
+        });
+    </script>
+}

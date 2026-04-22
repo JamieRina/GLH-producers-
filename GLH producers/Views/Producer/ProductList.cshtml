@@ -1,0 +1,67 @@
+@model System.Collections.Generic.List<GLH_producers.Models.ProductModel>
+
+@{
+    ViewBag.Title = "My Products";
+}
+
+<h2>My Products</h2>
+<p>This page lists products owned by the logged-in producer and gives simple edit or remove options.</p>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-info">@ViewBag.Message</div>
+}
+
+<p>
+    @Html.ActionLink("Add Product", "CreateProduct", "Producer", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Back to dashboard", "Dashboard", "Producer", null, new { @class = "btn btn-secondary" })
+</p>
+
+@if (Model.Count == 0)
+{
+    <p>You have not added any products yet.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Available</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td>@Html.Encode(product.Name)</td>
+                    <td>@Html.Encode(product.Category)</td>
+                    <td>@product.Price.ToString("C")</td>
+                    <td>@product.Stock</td>
+                    <td>@(product.IsAvailable ? "Yes" : "No")</td>
+                    <td>
+                        @Html.ActionLink("Edit", "EditProduct", "Producer", new { id = product.ProductId }, new { @class = "btn btn-secondary btn-sm" })
+
+                        @using (Html.BeginForm("RemoveProduct", "Producer", FormMethod.Post, new { @class = "d-inline", onsubmit = "return confirmProductRemove();" }))
+                        {
+                            @Html.Hidden("id", product.ProductId)
+                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@section scripts {
+    <script>
+        function confirmProductRemove() {
+            return confirm("Remove this product from public sale?");
+        }
+    </script>
+}

@@ -1,0 +1,67 @@
+@model System.Collections.Generic.List<GLH_producers.Models.CustomerOrderViewModel>
+
+@{
+    ViewBag.Title = "Order History";
+}
+
+<h2>Order History</h2>
+<p>This page shows previous orders for the logged-in customer.</p>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success">@ViewBag.Message</div>
+}
+
+@if (Model.Count == 0)
+{
+    <p>You have not placed any orders yet.</p>
+}
+else
+{
+    foreach (var order in Model)
+    {
+        <div class="card mb-3">
+            <div class="card-body">
+                <h4>Order #@order.OrderId</h4>
+                <p>
+                    <strong>Date:</strong> @order.OrderDate.ToString("dd/MM/yyyy")
+                    <br />
+                    <strong>Type:</strong> @order.OrderType
+                    <br />
+                    <strong>Status:</strong> @order.Status
+                    <br />
+                    <strong>Required date:</strong> @(order.RequiredDate.HasValue ? order.RequiredDate.Value.ToString("dd/MM/yyyy") : "Not set")
+                </p>
+
+                @if (order.OrderType == "Delivery")
+                {
+                    <p><strong>Address:</strong> @Html.Encode(order.Address)</p>
+                }
+
+                <table class="table table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Line total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in order.Items)
+                        {
+                            <tr>
+                                <td>@Html.Encode(item.ProductName)</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.UnitPrice.ToString("C")</td>
+                                <td>@item.LineTotal.ToString("C")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <p><strong>Total:</strong> @order.Total.ToString("C")</p>
+            </div>
+        </div>
+    }
+}

@@ -1,0 +1,49 @@
+@model System.Collections.Generic.List<GLH_producers.Models.ProducerOrderRowViewModel>
+
+@{
+    ViewBag.Title = "Producer Orders";
+}
+
+<h2>Producer Orders</h2>
+<p>This page shows order lines for products owned by the logged-in producer.</p>
+
+<p>
+    @Html.ActionLink("Back to dashboard", "Dashboard", "Producer", null, new { @class = "btn btn-secondary" })
+</p>
+
+@if (Model.Count == 0)
+{
+    <p>No orders have been placed for your products yet.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Order</th>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Line total</th>
+                <th>Status</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>#@order.OrderId</td>
+                    <td>@order.OrderDate.ToString("dd/MM/yyyy")</td>
+                    <td>@Html.Encode(order.CustomerName)</td>
+                    <td>@Html.Encode(order.ProductName)</td>
+                    <td>@order.Quantity</td>
+                    <td>@order.LineTotal.ToString("C")</td>
+                    <td>@order.Status</td>
+                    <td>@order.OrderType</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
