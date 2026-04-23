@@ -1,56 +1,117 @@
 @model GLH_producers.Models.HomeIndexViewModel
 
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Home";
 }
 
-<main>
-    <h2>Welcome to GLH Producers</h2>
-    <p>
-        GLH Producers helps local customers find fresh products from nearby producers.
-        Customers can browse available products, add them to a basket, and place orders
-        for collection or delivery.
-    </p>
+<main class="home-page">
+    <section class="home-welcome">
+        <div>
+            <p class="glh-kicker">Local food and drink</p>
+            <h1>Welcome to GLH Producers</h1>
+            <p>
+                Browse fresh food and drink from nearby producers, add items to your basket,
+                and order for collection or delivery.
+            </p>
+            <p class="home-actions">
+                @Html.ActionLink("Browse all products", "Index", "Products", null, new { @class = "btn btn-primary" })
+                @Html.ActionLink("View basket", "Index", "Basket", null, new { @class = "btn btn-secondary" })
+            </p>
+        </div>
+    </section>
 
-    <p>
-        This homepage gives a simple preview of the shop and links users to the main product
-        browsing page.
-    </p>
+    <section class="home-carousel-section" aria-label="GLH Producers highlights">
+        <div id="homeCarousel" class="carousel slide glh-carousel" data-bs-ride="carousel" data-bs-interval="4500">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Fresh local produce"></button>
+                <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="1" aria-label="Trusted producers"></button>
+                <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="2" aria-label="Simple ordering"></button>
+            </div>
 
-    <p>
-        @Html.ActionLink("Browse all products", "Index", "Products", null, new { @class = "btn btn-primary" })
-        @Html.ActionLink("View basket", "Index", "Basket", null, new { @class = "btn btn-secondary" })
-    </p>
-
-    <h3>Featured Products</h3>
-
-    @if (Model.FeaturedProducts.Count == 0)
-    {
-        <p>No products are currently available.</p>
-    }
-    else
-    {
-        <div class="row">
-            @foreach (var product in Model.FeaturedProducts)
-            {
-                <div class="col-md-3 mb-3">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h4>@Html.Encode(product.Name)</h4>
-                            <p>@Html.Encode(product.Category)</p>
-                            <p><strong>@product.Price.ToString("C")</strong></p>
-                            <p>Stock: @product.Stock</p>
-
-                            @using (Html.BeginForm("Add", "Basket", FormMethod.Post))
-                            {
-                                @Html.Hidden("id", product.ProductId)
-                                <input type="hidden" name="quantity" value="1" />
-                                <button type="submit" class="btn btn-primary btn-sm">Add to basket</button>
-                            }
-                        </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="glh-carousel-image" src="https://images.unsplash.com/photo-1568455283161-1f29a9faaec0?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Rows of green vegetables growing on a farm" />
+                    <div class="carousel-caption">
+                        <span class="carousel-badge">Fresh picks</span>
+                        <h2>Fresh Local Produce</h2>
+                        <p>Support local farmers and enjoy quality food.</p>
                     </div>
                 </div>
-            }
+                <div class="carousel-item">
+                    <img class="glh-carousel-image" src="https://images.unsplash.com/photo-1755702612491-fe5ad4aa6332?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="A barn standing in a field at sunrise" />
+                    <div class="carousel-caption">
+                        <span class="carousel-badge">Local farms</span>
+                        <h2>Trusted Producers</h2>
+                        <p>Learn where your food comes from.</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img class="glh-carousel-image" src="https://images.unsplash.com/photo-1775919422001-9c6d254205a4?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Fresh produce displayed at an outdoor market stall" />
+                    <div class="carousel-caption">
+                        <span class="carousel-badge">Easy orders</span>
+                        <h2>Simple Ordering</h2>
+                        <p>Browse, order, and collect with ease.</p>
+                    </div>
+                </div>
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
-    }
+    </section>
+
+    <section class="home-info-row">
+        <div class="home-info-card">
+            <h3>Local Products</h3>
+            <p>Browse food and drink from local producers in one simple place.</p>
+        </div>
+        <div class="home-info-card">
+            <h3>Easy Ordering</h3>
+            <p>Add items to your basket and choose collection or delivery at checkout.</p>
+        </div>
+        <div class="home-info-card">
+            <h3>Support Local</h3>
+            <p>Help smaller producers reach more customers in the area.</p>
+        </div>
+    </section>
+
+    <section class="home-featured-products">
+        <h2>Featured Products</h2>
+
+        @if (Model.FeaturedProducts.Count == 0)
+        {
+            <p class="empty-state">No products are currently available.</p>
+        }
+        else
+        {
+            <div class="row">
+                @foreach (var product in Model.FeaturedProducts)
+                {
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h4>@Html.Encode(product.Name)</h4>
+                                <p>@Html.Encode(product.Category)</p>
+                                <p><strong>@product.Price.ToString("C")</strong></p>
+                                <p>Stock: @product.Stock</p>
+
+                                @using (Html.BeginForm("Add", "Basket", FormMethod.Post))
+                                {
+                                    @Html.Hidden("id", product.ProductId)
+                                    <input type="hidden" name="quantity" value="1" />
+                                    <button type="submit" class="btn btn-primary btn-sm">Add to basket</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </section>
 </main>

@@ -24,7 +24,7 @@ namespace GLH_producers
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/Site.css"));
         }
     }
 }

@@ -7,10 +7,18 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
-<body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+@{
+    var controllerName = (ViewContext.RouteData.Values["controller"] as string ?? "Home").ToLowerInvariant();
+    var actionName = (ViewContext.RouteData.Values["action"] as string ?? "Index").ToLowerInvariant();
+    var pageClass = controllerName + "-" + actionName;
+}
+<body class="glh-page @pageClass">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark glh-navbar">
         <div class="container">
-            @Html.ActionLink("GLH Producers", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            <a class="navbar-brand glh-brand" href="@Url.Action("Index", "Home", new { area = "" })">
+                <span class="glh-logo-mark">G</span>
+                <span class="glh-logo-text">Greenfield Local Hub</span>
+            </a>
             <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -97,8 +105,17 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Love GLH Producers</p>
+        <footer class="glh-footer">
+            <div>
+                <strong>GLH Producers</strong>
+                <p>Local food, fresh produce, and simple ordering.</p>
+            </div>
+            <div class="glh-footer-links">
+                @Html.ActionLink("Products", "Index", "Products")
+                @Html.ActionLink("About", "About", "Home")
+                @Html.ActionLink("Contact", "Contact", "Home")
+            </div>
+            <p class="glh-footer-copy">&copy; @DateTime.Now.Year - Love GLH Producers</p>
         </footer>
     </div>
 
